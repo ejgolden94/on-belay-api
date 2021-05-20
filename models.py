@@ -33,8 +33,8 @@ class Route(Model):
 class Climb(Model):
     image=BigBitField() 
     created=DateTimeField(default=datetime.datetime.now)
-    creator=ForeignKeyField(User, backref='my_climbs')
-    route=ForeignKeyField(Route, backref='route_climbs')
+    # creator=ForeignKeyField(User, backref='my_climbs')
+    # route=ForeignKeyField(Route, backref='route_climbs')
     notes=CharField()
     climb_type=CharField()
     height=IntegerField()
