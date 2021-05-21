@@ -124,3 +124,16 @@ def login():
             message='Incorrect Username or Password',
             status=401
         ),401
+
+
+################################
+### ------- Logout User --------
+################################
+@users.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+    return jsonify(
+        data={},
+        message='Successfully Logged Out User',
+        status=200
+    ),200
