@@ -1,16 +1,18 @@
+from logging import NullHandler
 from peewee import *
 import datetime
+from flask_login import UserMixin 
  
 DATABASE = SqliteDatabase('climbs.sqlite')
 
 ######## USERS MODEL ########
-class User(Model):
+class User(UserMixin, Model):
     username=CharField(unique=True)
     email=CharField(unique=True)
     password=CharField()
-    display_name=CharField()
-    description=CharField()
-    is_admin=BooleanField()
+    display_name=CharField(null = True)
+    description=CharField(null = True)
+    is_admin=BooleanField(default=False)
     created=DateTimeField(default=datetime.datetime.now)
 
     class Meta:
@@ -33,7 +35,7 @@ class Route(Model):
 class Climb(Model):
     image=BigBitField() 
     created=DateTimeField(default=datetime.datetime.now)
-    # creator=ForeignKeyField(User, backref='my_climbs')
+    creator=ForeignKeyField(User, backref='my_climbs')
     # route=ForeignKeyField(Route, backref='route_climbs')
     notes=CharField()
     climb_type=CharField()
