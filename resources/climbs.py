@@ -1,6 +1,7 @@
 import models
 from flask import Blueprint,request,jsonify
 from playhouse.shortcuts import model_to_dict
+from flask_login import current_user
 
 ####### BLUEPRINT
 climbs = Blueprint('climbs','climbs')
@@ -29,6 +30,8 @@ def get_climbs():
 @climbs.route('/',methods=['POST'])
 def create_climb_log():
     payload=request.get_json()
+    payload['creator']=current_user.id # logged in user is automatically the creator of the climb
+    
     new_climb=models.Climb.create(**payload)
     climb_dict=model_to_dict(new_climb)
     # popping image because its stored in bytes and is not serializeable
