@@ -44,7 +44,6 @@ def create_user():
     except models.DoesNotExist:
         # If the does not exist error is thrown, the user email is not taken 
         # hash the password using bcrypt 
-        print('user doesnt exist yet ...')
         password_hash = generate_password_hash(payload['password'])
 
         try:
@@ -56,8 +55,6 @@ def create_user():
             )
 
             login_user(created_user)
-
-            print(created_user)
 
             created_user_dict = model_to_dict(created_user)
             # processing created_user_dict to be serializeable
