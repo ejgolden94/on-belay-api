@@ -73,3 +73,20 @@ def edit_climb(id):
         message='Successfully updated climb with id ' + id,
         status=200
     ),200
+
+## Delete Climb 
+@climbs.route('/<id>', methods=['DELETE'])
+def delete_climb(id):
+    deleted_climb = models.Climb.get_by_id(id)
+    models.Climb.delete_by_id(id)
+
+    deleted_dict = model_to_dict(deleted_climb)
+    deleted_dict.pop('image')
+    deleted_dict["created"] = str(deleted_dict["created"])
+    deleted_dict["time"]= float(deleted_dict["time"])
+
+    return jsonify(
+        data=deleted_dict,
+        message='Successfully deleted climb with id ' + id, 
+        status=200
+    ),200
