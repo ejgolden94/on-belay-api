@@ -9,7 +9,9 @@ users = Blueprint('users','users')
 
 ###### ROUTES
 
+##########################################
 ### -------- Get all Users -------- 
+##########################################
 @users.route('/',methods=['GET'])
 def get_users():
     users = models.User.select()
@@ -24,7 +26,9 @@ def get_users():
         status=200
     ), 200
 
+####################################################
 ### -------- Create New User (Sign Up) -------- 
+####################################################
 @users.route('/register',methods=['POST'])
 def create_user():
     payload = request.get_json()
@@ -32,12 +36,12 @@ def create_user():
     #normalize data
     payload['email'] = payload['email'].lower()
     payload['username'] = payload['username'].lower()
-    print(payload) 
 
     try:
         models.User.get(models.User.email == payload['email'])
         # if no error is thrown, another user with the email already exists
         return jsonify(
+            data={},
             message='a user with that email already exists',
             status=401
         ),401
@@ -69,6 +73,54 @@ def create_user():
         except models.IntegrityError:
             # if we do get an error here then the username is taken
             return jsonify(
+                data={},
                 message='That username is already taken',
                 status=201
             ),201
+
+################################
+### -------- Login User -------- 
+################################
+@users.route('/login',methods=['POST'])
+def login():
+    payload = request.get_json()
+    
+    #normalize data
+    payload['email'] = payload['email'].lower()
+    payload['username'] = payload['username'].lower()
+    print(payload) 
+
+    try:
+        # does the user exist?
+        user = models.User.get(models.User.email == payload['email'])
+        print(user)
+        user_dict=model_to_dict(user)
+        # if no error is thrown the user exists and we can check their password
+        password_match = check_password_hash(user_dict['password'], payload['password'])
+
+        if password_match:
+            # log in the user
+            login_user(user)
+            
+            user_dict.pop('password')
+            return jsonify(
+                data=user_dict,
+                mesasge=f"Successfully logged in user {user_dict['email']}",
+                status=200
+            ),200
+        else:
+            print('Incorrect Password')
+            return jsonify(
+                data={},
+                message="Incorrect Username or Password",
+                status=401
+            ),401
+
+    except models.DoesNotExist:
+        # if theres an error the user wasnt found
+        print('Username is incorrect')
+        return jsonify(
+            data={},
+            message='Incorrect Username or Password',
+            status=401
+        ),401
