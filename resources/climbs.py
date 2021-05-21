@@ -1,8 +1,6 @@
 import models
 from flask import Blueprint,request,jsonify
 from playhouse.shortcuts import model_to_dict
-import decimal
-import json
 
 ####### BLUEPRINT
 climbs = Blueprint('climbs','climbs')
@@ -13,7 +11,6 @@ climbs = Blueprint('climbs','climbs')
 @climbs.route('/',methods=['GET'])
 def get_climbs():
     climbs=models.Climb.select()
-    print(climbs)
     climb_dicts=[model_to_dict(climb) for climb in climbs]
 
     for climb in climb_dicts:
@@ -42,3 +39,20 @@ def create_climb_log():
         message='Successfully created new climb',
         status=201
     ),201
+
+## Show Route 
+@climbs.route('/<id>',methods=['GET'])
+def get_climb(id):
+    climb=models.Climb.get_by_id(id)
+
+    climb_dict=model_to_dict(climb)
+
+    climb_dict.pop('image')
+    climb_dict["created"] = str(climb_dict["created"])
+    climb_dict["time"]= float(climb_dict["time"])
+
+    return jsonify(
+        data=climb_dict,
+        message='Successfully found climb with id ' + id,
+        status=200
+    ),200
