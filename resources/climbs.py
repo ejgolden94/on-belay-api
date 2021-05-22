@@ -94,14 +94,11 @@ def get_climb(id):
 def edit_climb(id):
     payload=request.get_json()
     models.Climb.update(**payload).where(models.Climb.id==id).execute()
-    climb_dict = model_to_dict(models.Climb.get_by_id(id))
-
-    climb_dict.pop('image')
-    climb_dict["created"] = str(climb_dict["created"])
-    climb_dict["time"]= float(climb_dict["time"])
+    
+    climb_dict = json.dumps(model_to_dict(models.Climb.get_by_id(id)), cls=customEncoder, default=str)
 
     return jsonify(
-        data=climb_dict,
+        data=json.loads(climb_dict),
         message='Successfully updated climb with id ' + id,
         status=200
     ),200
