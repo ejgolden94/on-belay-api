@@ -97,12 +97,10 @@ def login():
     #normalize data
     payload['email'] = payload['email'].lower()
     payload['username'] = payload['username'].lower()
-    print(payload) 
 
     try:
         # does the user exist?
         user = models.User.get(models.User.email == payload['email'])
-        print(user)
         user_dict=model_to_dict(user)
         # if no error is thrown the user exists and we can check their password
         password_match = check_password_hash(user_dict['password'], payload['password'])
@@ -112,9 +110,11 @@ def login():
             login_user(user)
             
             user_dict.pop('password')
+            user_json=json.loads(json.dumps(user_dict,cls=DateTimeEncoder,default=str))
+            
             return jsonify(
-                data=user_dict,
-                mesasge=f"Successfully logged in user {user_dict['email']}",
+                data=user_json,
+                message=f"Successfully logged in user {user_json['email']}",
                 status=200
             ),200
         else:
