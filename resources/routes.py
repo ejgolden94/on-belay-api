@@ -72,6 +72,29 @@ def get_user_routes():
         status=200
     ),200
 
+############################################
+### ----- Get all of a Routes Climbs -------
+# ------------------------------------------
+# also this takes a query param of user to get
+# the climb for a route for just that user id
+# that param should just pass in a boolean 
+############################################
+@routes.route('<id>/climbs',methods=['GET'])
+def get_routes_climbs(id):
+    route = models.Route.get_by_id(id)
+    if not request.args.get('user'):
+        climb_dicts = [model_to_dict(climb) for climb in route.route_climbs]
+    else:
+        climbs = models.Climb.select().where((models.Climb.route==route.id) & (models.Climb.creator == current_user.id))
+        climb_dicts = [model_to_dict(climb) for climb in climbs]
+
+    climb_dicts = json.dumps(climb_dicts,cls=DateTimeEncoder, default=str)
+    climb_json = json.loads(climb_dicts)
+    return jsonify(
+        data=climb_json,
+        message=f"Successfully found {len(climb_json)} climbs for route with id " + id,
+        status=200
+    ),200
 
 ##########################################
 ### --------- Show Route ---------- 
