@@ -56,6 +56,7 @@ def create_route():
         message = f"Successfully created new route, {new_route_dict['name']}."
     )
 
+
 ##########################################
 ### --------- Edit Route ---------- 
 ##########################################
@@ -70,4 +71,20 @@ def edit_route(id):
         data=json.loads(edited_dict),
         message=f"successfully edited route with id " + id,
         status=200 
+    ),200
+
+
+##########################################
+### --------- Delete Route ---------- 
+##########################################
+@routes.route('/<id>', methods=['DELETE'])
+def delete_route(id):
+    delete_route = models.Route.get_by_id(id)
+    models.Route.delete_by_id(id)
+    delete_route = json.dumps(model_to_dict(delete_route),cls=DateTimeEncoder)
+
+    return jsonify(
+        data=json.loads(delete_route),
+        message= f"Succesfully deleted route with id " + id,
+        status=200
     ),200

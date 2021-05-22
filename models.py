@@ -19,15 +19,14 @@ class User(UserMixin, Model):
 
 ######## ROUTES MODEL #######
 class Route(Model):
-    name=CharField(unique=True)
+    name=CharField() 
     location=CharField()
     height=IntegerField()
     rating=CharField()
     wall_type=CharField()
     description=CharField()
     protection=CharField()
-    # image=BigBitField() // for later when were storing images
-    image=CharField(null = True)
+    image=CharField(null = True) ## if we want to put multiple images here, we may want to rework this as an array
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_routes')
 
