@@ -1,4 +1,3 @@
-from logging import NullHandler
 from peewee import *
 import datetime
 from flask_login import UserMixin 
@@ -20,10 +19,14 @@ class User(UserMixin, Model):
 
 ######## ROUTES MODEL #######
 class Route(Model):
-    name=CharField(unique=True)
+    name=CharField() 
     location=CharField()
+    height=IntegerField()
+    rating=CharField()
+    wall_type=CharField()
     description=CharField()
-    image=BigBitField()
+    protection=CharField()
+    image=CharField(null = True) ## if we want to put multiple images here, we may want to rework this as an array
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_routes')
 
@@ -33,18 +36,16 @@ class Route(Model):
 
 ########  CLIMBS MODEL ########
 class Climb(Model):
-    image=BigBitField() 
+    # image=BigBitField() // for later when were storing images
+    image=CharField(null = True)
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_climbs')
-    # route=ForeignKeyField(Route, backref='route_climbs')
-    notes=CharField()
+    route=ForeignKeyField(Route, backref='route_climbs')
+    notes=CharField(null = True)
     climb_type=CharField()
-    height=IntegerField()
-    rating=CharField()
     performance=CharField()
     gym_outdoor=CharField()
-    time=DecimalField()
-    wall_type=CharField()
+    time=DecimalField(null = True)
 
     class Meta:
         database = DATABASE
