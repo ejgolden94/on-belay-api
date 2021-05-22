@@ -3,18 +3,20 @@ from flask import Blueprint,request,jsonify
 from playhouse.shortcuts import model_to_dict
 from flask_login import current_user
 import json
+import decimal
 from datetime import datetime
 
 ####### BLUEPRINT
 climbs = Blueprint('climbs','climbs')
 
 ####### Custom JSON Encoders
-class DateTimeEncoder(json.JSONEncoder):
+class customEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime):
             return o.isoformat()
+        elif isinstance(o, decimal.Decimal):
+            return float(o)
         return json.JSONEncoder.default(self, o)
-
 
 ###### ROUTES
 
@@ -36,7 +38,7 @@ def get_climbs():
         message=f"Successfully found {len(climb_dicts)} climbs",
         status=200
     ),200
-    
+
 
 ##########################################
 ### -------- Create New Climb -------- 
@@ -49,13 +51,26 @@ def create_climb_log():
     new_climb=models.Climb.create(**payload)
     climb_dict=model_to_dict(new_climb)
 
-    climb_dict = json.dumps(climb_dict, cls=DateTimeEncoder)
+    climb_dict = json.dumps(climb_dict, cls=customEncoder, default=str)
     return jsonify(
         data=json.loads(climb_dict),
         message='Successfully created new climb',
         status=201
     ),201
 
+##########################################
+### ----- Get Current Users Climbs -------
+##########################################
+@climbs.route('/my_climbs',methods=['GET'])
+def get_user_climbs():
+    climb_dicts = [model_to_dict(climb) for climb in current_user.my_climbs]
+    climb_dicts = json.dumps(climb_dicts,cls=customEncoder, default=str)
+    climb_json = json.loads(climb_dicts)
+    return jsonify(
+        data=climb_json,
+        message=f"Successfully found {len(climb_json)} climbs for user with id " + str(current_user.id),
+        status=200
+    ),200
 
 ##########################################
 ### -------- Show Climb -------- 
