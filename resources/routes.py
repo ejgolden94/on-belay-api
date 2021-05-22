@@ -56,6 +56,21 @@ def create_route():
         message = f"Successfully created new route, {new_route_dict['name']}."
     )
 
+##########################################
+### --------- Show Route ---------- 
+##########################################
+@routes.route('/<id>', methods=['GET'])
+def get_route(id):
+    route = models.Route.get_by_id(id)
+    route_json = json.dumps(model_to_dict(route),cls=DateTimeEncoder)
+
+    return jsonify(
+        data=json.loads(route_json),
+        message=f"Suceesfully found route with id " + id,
+        status=200
+    ),200
+
+
 
 ##########################################
 ### --------- Edit Route ---------- 
