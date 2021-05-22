@@ -2,9 +2,19 @@ import models
 from flask import Blueprint,request,jsonify
 from playhouse.shortcuts import model_to_dict
 from flask_login import current_user
+import json
+from datetime import datetime
 
 ####### BLUEPRINT
 climbs = Blueprint('climbs','climbs')
+
+####### Custom JSON Encoders
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return json.JSONEncoder.default(self, o)
+
 
 ###### ROUTES
 
@@ -31,14 +41,13 @@ def get_climbs():
 def create_climb_log():
     payload=request.get_json()
     payload['creator']=current_user.id # logged in user is automatically the creator of the climb
-    
+
     new_climb=models.Climb.create(**payload)
     climb_dict=model_to_dict(new_climb)
-    # popping image because its stored in bytes and is not serializeable
-    climb_dict.pop('image')
-    print(climb_dict)
+
+    climb_dict = json.dumps(climb_dict, cls=DateTimeEncoder)
     return jsonify(
-        data=climb_dict,
+        data=json.loads(climb_dict),
         message='Successfully created new climb',
         status=201
     ),201
@@ -49,7 +58,7 @@ def get_climb(id):
     climb=models.Climb.get_by_id(id)
 
     climb_dict=model_to_dict(climb)
-
+    
     climb_dict.pop('image')
     climb_dict["created"] = str(climb_dict["created"])
     climb_dict["time"]= float(climb_dict["time"])

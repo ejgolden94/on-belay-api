@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_manager
 ### Import resources
 from resources.climbs import climbs
 from resources.users import users
+from resources.routes import routes
 
 load_dotenv() # takes the environment variables from .env
 
@@ -26,6 +27,7 @@ def load_user(user_id):
 ######## Register Blueprints ###########
 app.register_blueprint(climbs,url_prefix='/api/v1/climbs')
 app.register_blueprint(users,url_prefix='/api/v1/users')
+app.register_blueprint(routes,url_prefix='/api/v1/routes')
 
 ######## ROUTES ########
 

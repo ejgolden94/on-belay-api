@@ -12,7 +12,7 @@ routes = Blueprint('routes','routes')
 ##########################################
 ### -------- Get all Routes -------- 
 ##########################################
-@routes.route('/',method=['GET'])
+@routes.route('/',methods=['GET'])
 def get_routes():
     routes = models.Route.select()
     route_dicts = [model_to_dict(route) for route in routes]
@@ -30,7 +30,7 @@ def get_routes():
 ##########################################
 ### --------- Create New Route ---------- 
 ##########################################
-@routes.route('/',method=['POST'])
+@routes.route('/',methods=['POST'])
 def create_route():
     payload=request.get_json()
     payload['creator'] = current_user.id
