@@ -3,9 +3,18 @@ from flask import Blueprint, request, jsonify
 from peewee import * 
 from playhouse.shortcuts import model_to_dict
 from flask_login import current_user
+from datetime import datetime 
+import json
 
 ####### BLUEPRINT
 routes = Blueprint('routes','routes')
+
+####### Custom JSON Encoders
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return json.JSONEncoder.default(self, o)
 
 ###### ROUTES
 
@@ -46,3 +55,19 @@ def create_route():
         data = new_route_dict,
         message = f"Successfully created new route, {new_route_dict['name']}."
     )
+
+##########################################
+### --------- Edit Route ---------- 
+##########################################
+@routes.route('/<id>',methods=['PUT'])
+def edit_route(id):
+    payload=request.get_json()
+    models.Route.update(**payload).where(models.Route.id == id).execute()
+    edited_route = models.Route.get_by_id(id)
+    edited_dict = json.dumps(model_to_dict(edited_route),cls=DateTimeEncoder)
+
+    return jsonify(
+        data=json.loads(edited_dict),
+        message=f"successfully edited route with id " + id,
+        status=200 
+    ),200
