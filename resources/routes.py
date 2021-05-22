@@ -30,7 +30,7 @@ def get_routes():
 
     return jsonify(
         data=json.loads(route_dicts),
-        message= f"Successfully found {len(route_dicts)} routes",
+        message= f"Successfully found {len(json.loads(route_dicts))} routes",
         status=200
     ),200
 
@@ -45,15 +45,15 @@ def create_route():
 
     new_route= models.Route.create(**payload)
 
-    new_route_dict = model_to_dict(new_route)
     # normalize unserializeable data
-    new_route_dict.pop('image')
-    new_route_dict['created'] = str(new_route_dict['created'])
+    new_route_dict = json.dumps(model_to_dict(new_route),cls=DateTimeEncoder, default=str)
+    new_route_json = json.loads(new_route_dict)
     
     return jsonify (
-        data = new_route_dict,
-        message = f"Successfully created new route, {new_route_dict['name']}."
-    )
+        data = new_route_json,
+        message = f"Successfully created new route, {new_route_json['name']}.",
+        status=201
+    ),201
 
 
 ##########################################
