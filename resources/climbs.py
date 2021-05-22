@@ -18,7 +18,9 @@ class DateTimeEncoder(json.JSONEncoder):
 
 ###### ROUTES
 
-## Index Route 
+##########################################
+### -------- Get all Climbs -------- 
+##########################################
 @climbs.route('/',methods=['GET'])
 def get_climbs():
     climbs=models.Climb.select()
@@ -34,9 +36,11 @@ def get_climbs():
         message=f"Successfully found {len(climb_dicts)} climbs",
         status=200
     ),200
+    
 
-
-# New Climb Route
+##########################################
+### -------- Create New Climb -------- 
+##########################################
 @climbs.route('/',methods=['POST'])
 def create_climb_log():
     payload=request.get_json()
@@ -52,7 +56,10 @@ def create_climb_log():
         status=201
     ),201
 
-## Show Route 
+
+##########################################
+### -------- Show Climb -------- 
+##########################################
 @climbs.route('/<id>',methods=['GET'])
 def get_climb(id):
     climb=models.Climb.get_by_id(id)
@@ -69,7 +76,10 @@ def get_climb(id):
         status=200
     ),200
 
-## Edit Climb 
+
+##########################################
+### -------- Edit Climb -------- 
+##########################################
 @climbs.route('/<id>', methods=['PUT'])
 def edit_climb(id):
     payload=request.get_json()
@@ -86,7 +96,10 @@ def edit_climb(id):
         status=200
     ),200
 
-## Delete Climb 
+
+##########################################
+### -------- Delete Climb -------- 
+##########################################
 @climbs.route('/<id>', methods=['DELETE'])
 def delete_climb(id):
     deleted_climb = models.Climb.get_by_id(id)
