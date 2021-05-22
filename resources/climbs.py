@@ -78,14 +78,10 @@ def get_user_climbs():
 def get_climb(id):
     climb=models.Climb.get_by_id(id)
 
-    climb_dict=model_to_dict(climb)
-    
-    climb_dict.pop('image')
-    climb_dict["created"] = str(climb_dict["created"])
-    climb_dict["time"]= float(climb_dict["time"])
+    climb_dict = json.dumps(model_to_dict(climb), cls=customEncoder, default=str)
 
     return jsonify(
-        data=climb_dict,
+        data=json.loads(climb_dict),
         message='Successfully found climb with id ' + id,
         status=200
     ),200
