@@ -26,12 +26,10 @@ def get_routes():
     routes = models.Route.select()
     route_dicts = [model_to_dict(route) for route in routes]
     # normalize unserializeable data
-    for route in route_dicts:
-        route['created'] = str(route['created'])    
-        route.pop('image')
+    route_dicts = json.dumps(route_dicts,cls=DateTimeEncoder, default=str)
 
     return jsonify(
-        data=route_dicts,
+        data=json.loads(route_dicts),
         message= f"Successfully found {len(route_dicts)} routes",
         status=200
     ),200
