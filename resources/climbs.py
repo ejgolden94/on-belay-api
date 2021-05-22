@@ -28,14 +28,11 @@ def get_climbs():
     climbs=models.Climb.select()
     climb_dicts=[model_to_dict(climb) for climb in climbs]
 
-    for climb in climb_dicts:
-        climb.pop('image')
-        climb["created"] = str(climb["created"])
-        climb["time"]= float(climb["time"])
+    climb_dicts = json.dumps(climb_dicts, cls=customEncoder, default=str)
 
     return jsonify(
-        data=climb_dicts,
-        message=f"Successfully found {len(climb_dicts)} climbs",
+        data=json.loads(climb_dicts),
+        message=f"Successfully found {len(json.loads(climb_dicts))} climbs",
         status=200
     ),200
 
@@ -81,14 +78,10 @@ def get_user_climbs():
 def get_climb(id):
     climb=models.Climb.get_by_id(id)
 
-    climb_dict=model_to_dict(climb)
-    
-    climb_dict.pop('image')
-    climb_dict["created"] = str(climb_dict["created"])
-    climb_dict["time"]= float(climb_dict["time"])
+    climb_dict = json.dumps(model_to_dict(climb), cls=customEncoder, default=str)
 
     return jsonify(
-        data=climb_dict,
+        data=json.loads(climb_dict),
         message='Successfully found climb with id ' + id,
         status=200
     ),200
@@ -101,14 +94,11 @@ def get_climb(id):
 def edit_climb(id):
     payload=request.get_json()
     models.Climb.update(**payload).where(models.Climb.id==id).execute()
-    climb_dict = model_to_dict(models.Climb.get_by_id(id))
 
-    climb_dict.pop('image')
-    climb_dict["created"] = str(climb_dict["created"])
-    climb_dict["time"]= float(climb_dict["time"])
+    climb_dict = json.dumps(model_to_dict(models.Climb.get_by_id(id)), cls=customEncoder, default=str)
 
     return jsonify(
-        data=climb_dict,
+        data=json.loads(climb_dict),
         message='Successfully updated climb with id ' + id,
         status=200
     ),200
@@ -122,13 +112,10 @@ def delete_climb(id):
     deleted_climb = models.Climb.get_by_id(id)
     models.Climb.delete_by_id(id)
 
-    deleted_dict = model_to_dict(deleted_climb)
-    deleted_dict.pop('image')
-    deleted_dict["created"] = str(deleted_dict["created"])
-    deleted_dict["time"]= float(deleted_dict["time"])
+    deleted_dict = json.dumps(model_to_dict(deleted_climb), cls=customEncoder, default=str)
 
     return jsonify(
-        data=deleted_dict,
+        data=json.loads(deleted_dict),
         message='Successfully deleted climb with id ' + id, 
         status=200
     ),200

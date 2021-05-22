@@ -3,9 +3,18 @@ from flask import Blueprint,request,jsonify
 from playhouse.shortcuts import model_to_dict
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user
+import json 
+from datetime import datetime
 
 ####### BLUEPRINT
 users = Blueprint('users','users')
+
+####### Custom JSON Encoders
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return json.JSONEncoder.default(self, o)
 
 ###### ROUTES
 
@@ -17,12 +26,11 @@ def get_users():
     users = models.User.select()
     user_dicts = [model_to_dict(user) for user in users]
 
-    for user in user_dicts:
-        user['created'] = str(user['created'])
+    user_dicts = json.dumps(user_dicts, cls=DateTimeEncoder, default=str)
     
     return jsonify(
-        data=user_dicts,
-        message=f"Successfully found {len(user_dicts)} users.",
+        data=json.loads(user_dicts),
+        message=f"Successfully found {len(json.loads(user_dicts))} users.",
         status=200
     ), 200
 
@@ -63,11 +71,12 @@ def create_user():
             created_user_dict = model_to_dict(created_user)
             # processing created_user_dict to be serializeable
             created_user_dict.pop('password')
-            created_user_dict['created'] = str(created_user_dict['created'])
+            created_user_dict= json.dumps(created_user_dict, cls=DateTimeEncoder, default=str)
+            created_user_json=json.loads(created_user_dict)
             
             return jsonify(
-                data=created_user_dict,
-                message=f"successfully created user {created_user_dict['username']}",
+                data=created_user_json,
+                message=f"successfully created user {created_user_json['username']}",
                 status=201
             ),201
         except models.IntegrityError:
@@ -88,12 +97,10 @@ def login():
     #normalize data
     payload['email'] = payload['email'].lower()
     payload['username'] = payload['username'].lower()
-    print(payload) 
 
     try:
         # does the user exist?
         user = models.User.get(models.User.email == payload['email'])
-        print(user)
         user_dict=model_to_dict(user)
         # if no error is thrown the user exists and we can check their password
         password_match = check_password_hash(user_dict['password'], payload['password'])
@@ -103,9 +110,11 @@ def login():
             login_user(user)
             
             user_dict.pop('password')
+            user_json=json.loads(json.dumps(user_dict,cls=DateTimeEncoder,default=str))
+            
             return jsonify(
-                data=user_dict,
-                mesasge=f"Successfully logged in user {user_dict['email']}",
+                data=user_json,
+                message=f"Successfully logged in user {user_json['email']}",
                 status=200
             ),200
         else:
