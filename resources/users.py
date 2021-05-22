@@ -71,11 +71,12 @@ def create_user():
             created_user_dict = model_to_dict(created_user)
             # processing created_user_dict to be serializeable
             created_user_dict.pop('password')
-            created_user_dict['created'] = str(created_user_dict['created'])
+            created_user_dict= json.dumps(created_user_dict, cls=DateTimeEncoder, default=str)
+            created_user_json=json.loads(created_user_dict)
             
             return jsonify(
-                data=created_user_dict,
-                message=f"successfully created user {created_user_dict['username']}",
+                data=created_user_json,
+                message=f"successfully created user {created_user_json['username']}",
                 status=201
             ),201
         except models.IntegrityError:
