@@ -22,6 +22,9 @@ class User(UserMixin, Model):
 class Route(Model):
     name=CharField(unique=True)
     location=CharField()
+    height=IntegerField()
+    rating=CharField()
+    wall_type=CharField()
     description=CharField()
     image=BigBitField()
     created=DateTimeField(default=datetime.datetime.now)
@@ -36,14 +39,14 @@ class Climb(Model):
     image=BigBitField() 
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_climbs')
-    # route=ForeignKeyField(Route, backref='route_climbs')
-    notes=CharField()
+    route=ForeignKeyField(Route, backref='route_climbs')
+    notes=CharField(null = True)
     climb_type=CharField()
     height=IntegerField()
     rating=CharField()
     performance=CharField()
     gym_outdoor=CharField()
-    time=DecimalField()
+    time=DecimalField(null = True)
     wall_type=CharField()
 
     class Meta:
