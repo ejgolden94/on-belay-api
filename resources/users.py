@@ -3,9 +3,18 @@ from flask import Blueprint,request,jsonify
 from playhouse.shortcuts import model_to_dict
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user
+import json 
+from datetime import datetime
 
 ####### BLUEPRINT
 users = Blueprint('users','users')
+
+####### Custom JSON Encoders
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return json.JSONEncoder.default(self, o)
 
 ###### ROUTES
 
@@ -17,12 +26,11 @@ def get_users():
     users = models.User.select()
     user_dicts = [model_to_dict(user) for user in users]
 
-    for user in user_dicts:
-        user['created'] = str(user['created'])
+    user_dicts = json.dumps(user_dicts, cls=DateTimeEncoder, default=str)
     
     return jsonify(
-        data=user_dicts,
-        message=f"Successfully found {len(user_dicts)} users.",
+        data=json.loads(user_dicts),
+        message=f"Successfully found {len(json.loads(user_dicts))} users.",
         status=200
     ), 200
 
