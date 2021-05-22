@@ -36,6 +36,7 @@ def get_routes():
         status=200
     ),200
 
+
 ##########################################
 ### --------- Create New Route ---------- 
 ##########################################
@@ -56,6 +57,22 @@ def create_route():
         message = f"Successfully created new route, {new_route_dict['name']}."
     )
 
+
+##########################################
+### ----- Get Current Users Routes -------
+##########################################
+@routes.route('/my_routes',methods=['GET'])
+def get_user_routes():
+    route_dicts = [model_to_dict(route) for route in current_user.my_routes]
+    route_dicts = json.dumps(route_dicts,cls=DateTimeEncoder, default=str)
+    route_json = json.loads(route_dicts)
+    return jsonify(
+        data=route_json,
+        message=f"Successfully found {len(route_json)} routes for user with id " + str(current_user.id),
+        status=200
+    ),200
+
+
 ##########################################
 ### --------- Show Route ---------- 
 ##########################################
@@ -69,7 +86,6 @@ def get_route(id):
         message=f"Suceesfully found route with id " + id,
         status=200
     ),200
-
 
 
 ##########################################

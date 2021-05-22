@@ -58,6 +58,7 @@ def create_climb_log():
         status=201
     ),201
 
+
 ##########################################
 ### ----- Get Current Users Climbs -------
 ##########################################
@@ -71,6 +72,7 @@ def get_user_climbs():
         message=f"Successfully found {len(climb_json)} climbs for user with id " + str(current_user.id),
         status=200
     ),200
+
 
 ##########################################
 ### -------- Show Climb -------- 
