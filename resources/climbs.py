@@ -28,14 +28,11 @@ def get_climbs():
     climbs=models.Climb.select()
     climb_dicts=[model_to_dict(climb) for climb in climbs]
 
-    for climb in climb_dicts:
-        climb.pop('image')
-        climb["created"] = str(climb["created"])
-        climb["time"]= float(climb["time"])
+    climb_dicts = json.dumps(climb_dicts, cls=customEncoder, default=str)
 
     return jsonify(
-        data=climb_dicts,
-        message=f"Successfully found {len(climb_dicts)} climbs",
+        data=json.loads(climb_dicts),
+        message=f"Successfully found {len(json.loads(climb_dicts))} climbs",
         status=200
     ),200
 
