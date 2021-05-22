@@ -94,7 +94,7 @@ def get_climb(id):
 def edit_climb(id):
     payload=request.get_json()
     models.Climb.update(**payload).where(models.Climb.id==id).execute()
-    
+
     climb_dict = json.dumps(model_to_dict(models.Climb.get_by_id(id)), cls=customEncoder, default=str)
 
     return jsonify(
@@ -112,13 +112,10 @@ def delete_climb(id):
     deleted_climb = models.Climb.get_by_id(id)
     models.Climb.delete_by_id(id)
 
-    deleted_dict = model_to_dict(deleted_climb)
-    deleted_dict.pop('image')
-    deleted_dict["created"] = str(deleted_dict["created"])
-    deleted_dict["time"]= float(deleted_dict["time"])
+    deleted_dict = json.dumps(model_to_dict(deleted_climb), cls=customEncoder, default=str)
 
     return jsonify(
-        data=deleted_dict,
+        data=json.loads(deleted_dict),
         message='Successfully deleted climb with id ' + id, 
         status=200
     ),200
