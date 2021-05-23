@@ -84,8 +84,8 @@ def create_user():
             return jsonify(
                 data={},
                 message='That username is already taken',
-                status=201
-            ),201
+                status=401
+            ),401
 
 ################################
 ### -------- Login User -------- 
@@ -96,7 +96,6 @@ def login():
     
     #normalize data
     payload['email'] = payload['email'].lower()
-    payload['username'] = payload['username'].lower()
 
     try:
         # does the user exist?
