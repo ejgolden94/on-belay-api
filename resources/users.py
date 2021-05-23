@@ -96,7 +96,6 @@ def login():
     
     #normalize data
     payload['email'] = payload['email'].lower()
-    payload['username'] = payload['username'].lower()
 
     try:
         # does the user exist?
