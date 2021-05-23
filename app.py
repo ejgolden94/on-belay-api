@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import models
 from flask_login import LoginManager, login_manager
+from flask_cors import CORS
 ### Import resources
 from resources.climbs import climbs
 from resources.users import users
@@ -22,6 +23,11 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return models.User.get_by_id(user_id)
+
+############# CORS ###############
+CORS(climbs,origins=['http://localhost:3000'], supports_credentials=True)
+CORS(users,origins=['http://localhost:3000'], supports_credentials=True)
+CORS(routes,origins=['http://localhost:3000'], supports_credentials=True)
 
 
 ######## Register Blueprints ###########
