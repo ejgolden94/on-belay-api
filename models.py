@@ -1,8 +1,10 @@
+import os
 from peewee import *
+from playhouse.db_url import connect
 import datetime
 from flask_login import UserMixin 
- 
-DATABASE = SqliteDatabase('climbs.sqlite')
+
+DATABASE = connect(os.environ.get('DATABASE_URL') or 'sqlite:///climbs.sqlite')
 
 ######## USERS MODEL ########
 class User(UserMixin, Model):

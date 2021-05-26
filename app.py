@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, after_this_request
 import os
 from dotenv import load_dotenv
 import models
@@ -35,6 +35,18 @@ app.register_blueprint(climbs,url_prefix='/api/v1/climbs')
 app.register_blueprint(users,url_prefix='/api/v1/users')
 app.register_blueprint(routes,url_prefix='/api/v1/routes')
 
+######## Postgres ###########
+@app.before_request
+def before_request():
+    """Connect to the db before each request"""
+    models.DATABASE.connect()
+
+    @after_this_request
+    def after_request(response):
+        """Close the db connetion after each request"""
+        models.DATABASE.close()
+        return response
+
 ######## ROUTES ########
 
 # TEST ROUTE
@@ -46,3 +58,6 @@ def hello():
 if __name__ == '__main__':
     models.initialize()
     app.run(debug=DEBUG, port=PORT)
+
+if os.environ.get('FLASK_ENV') != 'development':
+    models.initialize()
