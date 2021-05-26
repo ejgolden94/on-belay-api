@@ -108,7 +108,7 @@ def get_route(id):
             message=f"Successfully found route with id " + id,
             status=200
         ),200
-    except models.RouteDoesNotExist:
+    except models.DoesNotExist:
         return jsonify(
             data={},
             message=f"Counld not find route with id " + id,
