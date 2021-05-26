@@ -99,14 +99,21 @@ def get_routes_climbs(id):
 ##########################################
 @routes.route('/<id>', methods=['GET'])
 def get_route(id):
-    route = models.Route.get_by_id(id)
-    route_json = json.dumps(model_to_dict(route),cls=DateTimeEncoder)
+    try:
+        route = models.Route.get_by_id(id)
+        route_json = json.dumps(model_to_dict(route),cls=DateTimeEncoder)
 
-    return jsonify(
-        data=json.loads(route_json),
-        message=f"Suceesfully found route with id " + id,
-        status=200
-    ),200
+        return jsonify(
+            data=json.loads(route_json),
+            message=f"Successfully found route with id " + id,
+            status=200
+        ),200
+    except models.RouteDoesNotExist:
+        return jsonify(
+            data={},
+            message=f"Counld not find route with id " + id,
+            status=404
+        ),404
 
 
 ##########################################
