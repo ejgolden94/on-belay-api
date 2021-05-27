@@ -76,15 +76,22 @@ def get_user_climbs():
 ##########################################
 @climbs.route('/<id>',methods=['GET'])
 def get_climb(id):
-    climb=models.Climb.get_by_id(id)
+    try:
+        climb=models.Climb.get_by_id(id)
 
-    climb_dict = json.dumps(model_to_dict(climb), cls=customEncoder, default=str)
+        climb_dict = json.dumps(model_to_dict(climb), cls=customEncoder, default=str)
 
-    return jsonify(
-        data=json.loads(climb_dict),
-        message='Successfully found climb with id ' + id,
-        status=200
-    ),200
+        return jsonify(
+            data=json.loads(climb_dict),
+            message='Successfully found climb with id ' + id,
+            status=200
+        ),200
+    except models.DoesNotExist:
+        return jsonify(
+            data={},
+            message='Could not find climb with id ' + id,
+            status=404
+        ),404
 
 
 ##########################################
