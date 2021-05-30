@@ -83,7 +83,7 @@ def get_routes_climbs(id):
     if not request.args.get('user'):
         climb_dicts = [model_to_dict(climb) for climb in route.route_climbs]
     else:
-        climbs = models.Climb.select().where((models.Climb.route==route.id) & (models.Climb.creator == current_user.id))
+        climbs = models.Climb.select().where((models.Climb.route==route.id) & (models.Climb.creator == current_user.id)).order_by(models.Climb.created.desc())
         climb_dicts = [model_to_dict(climb) for climb in climbs]
 
     climb_dicts = json.dumps(climb_dicts,cls=DateTimeEncoder, default=str)
