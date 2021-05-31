@@ -8,6 +8,7 @@ from flask_cors import CORS
 from resources.climbs import climbs
 from resources.users import users
 from resources.routes import routes
+from resources.comments import comments
 
 load_dotenv() # takes the environment variables from .env
 
@@ -28,12 +29,14 @@ def load_user(user_id):
 CORS(climbs,origins=['http://localhost:3000'], supports_credentials=True)
 CORS(users,origins=['http://localhost:3000'], supports_credentials=True)
 CORS(routes,origins=['http://localhost:3000'], supports_credentials=True)
+CORS(comments,origins=['http://localhost:3000'], supports_credentials=True)
 
 
 ######## Register Blueprints ###########
 app.register_blueprint(climbs,url_prefix='/api/v1/climbs')
 app.register_blueprint(users,url_prefix='/api/v1/users')
 app.register_blueprint(routes,url_prefix='/api/v1/routes')
+app.register_blueprint(comments,url_prefix='/api/v1/comments')
 
 ######## Postgres ###########
 @app.before_request

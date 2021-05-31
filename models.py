@@ -53,7 +53,7 @@ class Climb(Model):
         database = DATABASE
 
 ########  COMMENTS MODEL ########
-class Comments(Model):
+class Comment(Model):
     creator=ForeignKeyField(User, backref='my_comments')
     created=DateTimeField(default=datetime.datetime.now)
     route=ForeignKeyField(Route, backref='route_comments')
@@ -65,6 +65,6 @@ class Comments(Model):
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([User,Route,Climb,Comments], safe=True)
+    DATABASE.create_tables([User,Route,Climb,Comment], safe=True)
     print('connected to the database (and created tables if they weren\'t already there)')
     DATABASE.close()
