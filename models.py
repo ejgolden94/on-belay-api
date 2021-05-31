@@ -28,6 +28,7 @@ class Route(Model):
     wall_type=CharField()
     description=CharField()
     protection=CharField()
+    announcement=CharField(null = True)
     image=CharField(null = True) ## if we want to put multiple images here, we may want to rework this as an array
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_routes')
@@ -38,7 +39,6 @@ class Route(Model):
 
 ########  CLIMBS MODEL ########
 class Climb(Model):
-    # image=BigBitField() // for later when were storing images
     image=CharField(null = True)
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_climbs')
@@ -52,8 +52,19 @@ class Climb(Model):
     class Meta:
         database = DATABASE
 
+########  COMMENTS MODEL ########
+class Comments(Model):
+    creator=ForeignKeyField(User, backref='my_comments')
+    created=DateTimeField(default=datetime.datetime.now)
+    route=ForeignKeyField(Route, backref='route_comments')
+    text=CharField()
+    rating=IntegerField()
+
+    class Meta:
+        database = DATABASE
+
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([User,Route,Climb], safe=True)
+    DATABASE.create_tables([User,Route,Climb,Comments], safe=True)
     print('connected to the database (and created tables if they weren\'t already there)')
     DATABASE.close()
