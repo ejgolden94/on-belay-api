@@ -58,7 +58,7 @@ class Comment(Model):
     created=DateTimeField(default=datetime.datetime.now)
     route=ForeignKeyField(Route, backref='route_comments')
     text=CharField()
-    rating=IntegerField()
+    rating=IntegerField(null = True)
 
     class Meta:
         database = DATABASE

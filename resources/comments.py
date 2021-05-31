@@ -40,4 +40,20 @@ def get_route_comments(route_id):
         ),404
 
 
+##########################################
+### -------- Create New Climb -------- 
+##########################################
+@comments.route('/',methods=['POST'])
+def create_comment():
+    payload=request.get_json()
+    payload['creator']=current_user.id # logged in user is automatically the creator of the comment
+
+    new_comment=models.Comment.create(**payload)
+    comment_dict=json.dumps(model_to_dict(new_comment), cls=customEncoder, default=str)
+
+    return jsonify(
+        data=json.loads(comment_dict),
+        message='Successfully created new comment',
+        status=201
+    ),201
 
