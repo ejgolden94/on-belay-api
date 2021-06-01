@@ -61,7 +61,7 @@ def create_climb_log():
 ##########################################
 @climbs.route('/my_climbs',methods=['GET'])
 def get_user_climbs():
-    climb_dicts = [model_to_dict(climb) for climb in current_user.my_climbs]
+    climb_dicts = [model_to_dict(climb) for climb in current_user.my_climbs.order_by(models.Climb.created.desc())]
     climb_dicts = json.dumps(climb_dicts,cls=customEncoder, default=str)
     climb_json = json.loads(climb_dicts)
     return jsonify(
