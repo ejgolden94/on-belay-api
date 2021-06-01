@@ -41,7 +41,7 @@ def get_route_comments(route_id):
 
 
 ##########################################
-### -------- Create New Climb -------- 
+### -------- Create New Comment -------- 
 ##########################################
 @comments.route('/',methods=['POST'])
 def create_comment():
@@ -57,3 +57,34 @@ def create_comment():
         status=201
     ),201
 
+##########################################
+### -------- Edit Comment -------- 
+##########################################
+@comments.route('/<id>', methods=['PUT'])
+def edit_comment(id):
+    payload=request.get_json()
+    models.Comment.update(**payload).where(models.Comment.id==id).execute()
+
+    comment_dict = json.dumps(model_to_dict(models.Comment.get_by_id(id)), cls=customEncoder, default=str)
+
+    return jsonify(
+        data=json.loads(comment_dict),
+        message='Successfully updated comment with id ' + id,
+        status=200
+    ),200
+
+##########################################
+### -------- Delete Comment -------- 
+##########################################
+@comments.route('/<id>', methods=['DELETE'])
+def delete_comment(id):
+    deleted_comment = models.Comment.get_by_id(id)
+    models.Comment.delete_by_id(id)
+
+    deleted_dict = json.dumps(model_to_dict(deleted_comment), cls=customEncoder, default=str)
+
+    return jsonify(
+        data=json.loads(deleted_dict),
+        message='Successfully deleted comment with id ' + id, 
+        status=200
+    ),200
