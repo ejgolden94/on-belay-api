@@ -29,6 +29,7 @@ class Route(Model):
     description=CharField()
     protection=CharField()
     announcement=CharField(null = True)
+    gym_outdoor=CharField()
     image=CharField(null = True) ## if we want to put multiple images here, we may want to rework this as an array
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_routes')
@@ -46,7 +47,6 @@ class Climb(Model):
     notes=CharField(null = True)
     climb_type=CharField()
     performance=CharField()
-    gym_outdoor=CharField()
     time=DecimalField(null = True)
 
     class Meta:

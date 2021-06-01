@@ -19,11 +19,16 @@ class DateTimeEncoder(json.JSONEncoder):
 ###### ROUTES
 
 ##########################################
-### -------- Get all Routes -------- 
+### -------- Get all Routes ------------
+# also this takes a query param of setting to get
+# the only the outdoor or indoor routes
 ##########################################
 @routes.route('/',methods=['GET'])
 def get_routes():
-    routes = models.Route.select()
+    if not request.args.get('setting'): 
+        routes = models.Route.select()
+    else:
+        routes = models.Route.select().where(models.Route.gym_outdoor == request.args.get('setting').capitalize()).execute()
     route_dicts = [model_to_dict(route) for route in routes]
     # normalize unserializeable data
     route_dicts = json.dumps(route_dicts,cls=DateTimeEncoder, default=str)
@@ -42,6 +47,7 @@ def get_routes():
 def create_route():
     payload=request.get_json()
     payload['creator'] = current_user.id
+    payload['gym_outdoor'] = payload['gym_outdoor'].capitalize()
 
     new_route= models.Route.create(**payload)
 
