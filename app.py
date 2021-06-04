@@ -26,10 +26,10 @@ def load_user(user_id):
     return models.User.get_by_id(user_id)
 
 ############# CORS ###############
-CORS(climbs,origins=['http://localhost:3000','https://on-belay.herokuapp.com/'], supports_credentials=True)
-CORS(users,origins=['http://localhost:3000','https://on-belay.herokuapp.com/'], supports_credentials=True)
-CORS(routes,origins=['http://localhost:3000','https://on-belay.herokuapp.com/'], supports_credentials=True)
-CORS(comments,origins=['http://localhost:3000','https://on-belay.herokuapp.com/'], supports_credentials=True)
+CORS(climbs,origins=['http://localhost:3000','https://on-belay.herokuapp.com'], supports_credentials=True)
+CORS(users,origins=['http://localhost:3000','https://on-belay.herokuapp.com'], supports_credentials=True)
+CORS(routes,origins=['http://localhost:3000','https://on-belay.herokuapp.com'], supports_credentials=True)
+CORS(comments,origins=['http://localhost:3000','https://on-belay.herokuapp.com'], supports_credentials=True)
 
 
 ######## Register Blueprints ###########
