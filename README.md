@@ -53,28 +53,28 @@ Create a Route: `https://on-belay-api.herokuapp.com/api/v1/routes/`
 ```
 - Will return an object containing the new route as JSON, a message, and a status 
 
-Get Current Users Routes `https://on-belay-api.herokuapp.com/api/v1/routes/my_routes`
+Get Current Users Routes: `https://on-belay-api.herokuapp.com/api/v1/routes/my_routes`
 - Method: `GET`
 - The client must be logged in for this route to send back any data
 - Will return an object containing all of the routes that user has created data in an array of JSON, a message, and a status 
 
-Get All Routes Climbs `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>/route_climbs`
+Get All Routes Climbs: `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>/route_climbs`
 - Methd:`GET`
 - Query Params: This enpoint will accept a `user` query param of either `true` or `false` to return only those climbs on a route logged by a specific user
 - Will return an object containing all of the climbs logged on a given route in an array of JSON, a message, and a status 
 
-Show Route `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
+Show Route: `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 - Methd:`GET`
 - Will return an object containing the data of a given route as JSON, a message, and a status 
 - If no route is found this will send back a `404` and an error message
 
-Edit Route `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
+Edit Route: `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 - Methd:`PUT`
 - Accepts JSON
 - Payload: this route requires a payload including any or multiple fields from the `POST` route example
 - Will return an object containing the data of the deleted route as JSON, a message, and a status 
 
-Delete Route `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
+Delete Route: `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 - Methd:`DELETE`
 - Will return an object containing the data of the deleted route as JSON, a message, and a status 
 
@@ -90,7 +90,7 @@ Create a Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/`
 - Payload: this route requires a payload -- example:
 ```javascript 
 {
-    notes:"Really banged my knee up on the overhang",
+    notes: "Really banged my knee up on the overhang",
     climb_type: "Sport",
     performance: "Rough Project",
     image:"<image link>"
@@ -106,17 +106,48 @@ Get Current Users Climbs: `https://on-belay-api.herokuapp.com/api/v1/climbs/my_c
 - The client must be logged in for this route to send back any data
 - Will return an object containing all of the climbs that user has created data in an array of JSON, a message, and a status 
 
-Show Climb `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
+Show Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
 - Methd:`GET`
 - Will return an object containing the data of a given route as JSON, a message, and a status 
 - If no climb is found this will send back a `404` and an error message
 
-Edit Climb `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
+Edit Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
 - Methd:`PUT`
 - Accepts JSON
 - Payload: this route requires a payload including any or multiple fields from the `POST` climb example
 - Will return an object containing the data of the deleted climb as JSON, a message, and a status 
 
-Delete Climb `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
+Delete Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
 - Methd:`DELETE`
 - Will return an object containing the data of the deleted climb as JSON, a message, and a status 
+
+### Users 
+Register New User: `https://on-belay-api.herokuapp.com/api/v1/users/register`
+- Method: `POST`
+- Accepts JSON
+- Payload: this route requires a payload including a username, user email and password
+```javascript
+{
+    username: "username",
+    email: "email@email.com",
+    password: "superStrongPassword123"
+}
+```
+- Will return an object containing the data of the new user as JSON, a message, and a status 
+- this route will also login the user
+
+Login User: `https://on-belay-api.herokuapp.com/api/v1/users/login`
+- Method: `POST`
+- Accepts JSON
+- Payload: this route requires a payload including a user email and password
+```javascript
+{
+    email: "email@email.com",
+    password: "superStrongPassword123"
+}
+```
+- Will return an object containing the data of the logged in user as JSON, a message, and a status 
+
+Logout User: `https://on-belay-api.herokuapp.com/api/v1/users/login`
+- Method: `GET`
+- Will return an object containing a message, and a status 
