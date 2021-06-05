@@ -33,7 +33,7 @@ Get all Routes: `https://on-belay-api.herokuapp.com/api/v1/routes/`
 - Query Params: This enpoint will accept a `setting` query param of either `indoor` or `outdoor` to show indoor (gym) routes vs outdoor 
 - Will return an object containing all routes data in an array of JSON, a message, and a status 
 
-Creat a Route: Get all Routes: `https://on-belay-api.herokuapp.com/api/v1/routes/` 
+Create a Route: `https://on-belay-api.herokuapp.com/api/v1/routes/` 
 - Method: `POST`
 - Accepts JSON
 - Payload: this route requires a payload -- example:
@@ -42,7 +42,7 @@ Creat a Route: Get all Routes: `https://on-belay-api.herokuapp.com/api/v1/routes
     name: "Pile-o-mania",
     description:"I don't know what the name refers to, but this route is not a \"pile\" the way I use the word to describe a climb....",
     protection: "7 bolts to chains with fixed biners. The last bolt might be hard to get to for a short climber but you are still safe.",
-    image:"https://d36ai2hkxl16us.cloudfront.net/thoughtindustries/image/upload/v1498500090/scrbwmci4pojai2zcdgo.jpg",
+    image:"<image link>",
     location: "Right next to Cuckoo's Nest. Look up for the huge flake.", // 255 char max
     gym_outdoor:"outdoor", // this must be indoor or outdoor 
     height: 50,
@@ -77,3 +77,46 @@ Edit Route `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 Delete Route `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 - Methd:`DELETE`
 - Will return an object containing the data of the deleted route as JSON, a message, and a status 
+
+
+### Climbs 
+Get all Climbs: `https://on-belay-api.herokuapp.com/api/v1/climbs/` 
+- Method: `GET`
+- Will return an object containing all climbs data in an array of JSON, a message, and a status 
+
+Create a Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/` 
+- Method: `POST`
+- Accepts JSON
+- Payload: this route requires a payload -- example:
+```javascript 
+{
+    notes:"Really banged my knee up on the overhang",
+    climb_type: "Sport",
+    performance: "Rough Project",
+    image:"<image link>"
+    time: 100,
+    route: 1 // this is a route id 
+    creator: 1 // this is a user id 
+}
+```
+- Will return an object containing the new climb as JSON, a message, and a status 
+
+Get Current Users Climbs: `https://on-belay-api.herokuapp.com/api/v1/climbs/my_climbs`
+- Method: `GET`
+- The client must be logged in for this route to send back any data
+- Will return an object containing all of the climbs that user has created data in an array of JSON, a message, and a status 
+
+Show Climb `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
+- Methd:`GET`
+- Will return an object containing the data of a given route as JSON, a message, and a status 
+- If no climb is found this will send back a `404` and an error message
+
+Edit Climb `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
+- Methd:`PUT`
+- Accepts JSON
+- Payload: this route requires a payload including any or multiple fields from the `POST` climb example
+- Will return an object containing the data of the deleted climb as JSON, a message, and a status 
+
+Delete Climb `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
+- Methd:`DELETE`
+- Will return an object containing the data of the deleted climb as JSON, a message, and a status 
