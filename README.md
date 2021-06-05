@@ -37,18 +37,18 @@ Create a Route: `https://on-belay-api.herokuapp.com/api/v1/routes/`
 - Method: `POST`
 - Accepts JSON
 - Payload: this route requires a payload -- example:
-```javascript 
+```json 
 {
-    name: "Pile-o-mania",
-    description:"I don't know what the name refers to, but this route is not a \"pile\" the way I use the word to describe a climb....",
-    protection: "7 bolts to chains with fixed biners. The last bolt might be hard to get to for a short climber but you are still safe.",
-    image:"<image link>",
-    location: "Right next to Cuckoo's Nest. Look up for the huge flake.", // 255 char max
-    gym_outdoor:"outdoor", // this must be indoor or outdoor 
-    height: 50,
-    rating:"5.10c",
-    wall_type:"overhang",
-    creator: 1 // this is a user id 
+    "name": "Pile-o-mania",
+    "description":"I don't know what the name refers to, but this route is not a \"pile\" the way I use the word to describe a climb....",
+    "protection": "7 bolts to chains with fixed biners. The last bolt might be hard to get to for a short climber but you are still safe.",
+    "image":"<image link>",
+    "location": "Right next to Cuckoo's Nest. Look up for the huge flake.", // 255 char max
+    "gym_outdoor":"outdoor", // this must be indoor or outdoor 
+    "height": 50,
+    "rating":"5.10c",
+    "wall_type":"overhang",
+    "creator": 1 // this is a user id 
 }
 ```
 - Will return an object containing the new route as JSON, a message, and a status 
@@ -72,7 +72,7 @@ Edit Route: `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 - Methd:`PUT`
 - Accepts JSON
 - Payload: this route requires a payload including any or multiple fields from the `POST` route example
-- Will return an object containing the data of the deleted route as JSON, a message, and a status 
+- Will return an object containing the data of the edited route as JSON, a message, and a status 
 
 Delete Route: `https://on-belay-api.herokuapp.com/api/v1/routes/<route_id>`
 - Methd:`DELETE`
@@ -88,15 +88,15 @@ Create a Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/`
 - Method: `POST`
 - Accepts JSON
 - Payload: this route requires a payload -- example:
-```javascript 
+```json 
 {
-    notes: "Really banged my knee up on the overhang",
-    climb_type: "Sport",
-    performance: "Rough Project",
-    image:"<image link>"
-    time: 100,
-    route: 1 // this is a route id 
-    creator: 1 // this is a user id 
+    "notes": "Really banged my knee up on the overhang",
+    "climb_type": "Sport",
+    "performance": "Rough Project",
+    "image":"<image link>",
+    "time": 100,
+    "route": 1,// this is a route id 
+    "creator": 1 // this is a user id 
 }
 ```
 - Will return an object containing the new climb as JSON, a message, and a status 
@@ -115,7 +115,7 @@ Edit Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
 - Methd:`PUT`
 - Accepts JSON
 - Payload: this route requires a payload including any or multiple fields from the `POST` climb example
-- Will return an object containing the data of the deleted climb as JSON, a message, and a status 
+- Will return an object containing the data of the edited climb as JSON, a message, and a status 
 
 Delete Climb: `https://on-belay-api.herokuapp.com/api/v1/climbs/<climb_id>`
 - Methd:`DELETE`
@@ -126,11 +126,11 @@ Register New User: `https://on-belay-api.herokuapp.com/api/v1/users/register`
 - Method: `POST`
 - Accepts JSON
 - Payload: this route requires a payload including a username, user email and password
-```javascript
+```json
 {
-    username: "username",
-    email: "email@email.com",
-    password: "superStrongPassword123"
+    "username": "username",
+    "email": "email@email.com",
+    "password": "superStrongPassword123"
 }
 ```
 - Will return an object containing the data of the new user as JSON, a message, and a status 
@@ -140,10 +140,10 @@ Login User: `https://on-belay-api.herokuapp.com/api/v1/users/login`
 - Method: `POST`
 - Accepts JSON
 - Payload: this route requires a payload including a user email and password
-```javascript
+```json
 {
-    email: "email@email.com",
-    password: "superStrongPassword123"
+    "email": "email@email.com",
+    "password": "superStrongPassword123"
 }
 ```
 - Will return an object containing the data of the logged in user as JSON, a message, and a status 
@@ -151,3 +151,26 @@ Login User: `https://on-belay-api.herokuapp.com/api/v1/users/login`
 Logout User: `https://on-belay-api.herokuapp.com/api/v1/users/login`
 - Method: `GET`
 - Will return an object containing a message, and a status 
+
+### Comments 
+Post New Comment User: `https://on-belay-api.herokuapp.com/api/v1/comment/`
+- Method: `POST`
+- Accepts JSON
+- Payload: this route requires a payload including text and route id. you must be logged in to hit this endpoint
+```json
+{
+    "text": "Finally redpointed this today!!!",
+    "route": 1, // route id
+}
+```
+- Will return an object containing the data of the new comment as JSON, a message, and a status 
+
+Edit Comment: `https://on-belay-api.herokuapp.com/api/v1/comment/<comment_id>`
+- Methd:`PUT`
+- Accepts JSON
+- Payload: this route requires a payload including any or multiple fields from the `POST` comment example
+- Will return an object containing the data of the edited comment as JSON, a message, and a status 
+
+Delete Comment: `https://on-belay-api.herokuapp.com/api/v1/comment/<comment_id>`
+- Methd:`DELETE`
+- Will return an object containing the data of the deleted comment as JSON, a message, and a status 
