@@ -12,7 +12,8 @@ class User(UserMixin, Model):
     email=CharField(unique=True)
     password=CharField()
     display_name=CharField(null = True)
-    description=CharField(null = True)
+    avatart=CharField(null = True)
+    description=TextField(null = True)
     is_admin=BooleanField(default=False)
     created=DateTimeField(default=datetime.datetime.now)
 
@@ -22,12 +23,12 @@ class User(UserMixin, Model):
 ######## ROUTES MODEL #######
 class Route(Model):
     name=CharField() 
-    location=CharField()
+    location=CharField(null = True)
     height=IntegerField()
     rating=CharField()
-    wall_type=CharField()
-    description=CharField()
-    protection=CharField()
+    wall_type=CharField(null = True)
+    description=TextField(null = True)
+    protection=TextField(null = True)
     announcement=CharField(null = True)
     gym_outdoor=CharField()
     image=CharField(null = True) ## if we want to put multiple images here, we may want to rework this as an array
@@ -44,7 +45,7 @@ class Climb(Model):
     created=DateTimeField(default=datetime.datetime.now)
     creator=ForeignKeyField(User, backref='my_climbs')
     route=ForeignKeyField(Route, backref='route_climbs')
-    notes=CharField(null = True)
+    notes=TextField(null = True)
     climb_type=CharField()
     performance=CharField()
     time=DecimalField(null = True)
