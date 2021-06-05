@@ -26,9 +26,9 @@ class DateTimeEncoder(json.JSONEncoder):
 @routes.route('/',methods=['GET'])
 def get_routes():
     if not request.args.get('setting'): 
-        routes = models.Route.select()
+        routes = models.Route.select().order_by(models.Route.created.desc())
     else:
-        routes = models.Route.select().where(models.Route.gym_outdoor == request.args.get('setting').capitalize()).execute()
+        routes = models.Route.select().where(models.Route.gym_outdoor == request.args.get('setting').capitalize()).order_by(models.Route.created.desc()).execute()
     route_dicts = [model_to_dict(route) for route in routes]
     # normalize unserializeable data
     route_dicts = json.dumps(route_dicts,cls=DateTimeEncoder, default=str)
