@@ -10,6 +10,13 @@ Technologies Used for this API:
 `Python`
 `Peewee`
 
+Installation:
+If you Are doing local development follow these steps. If you want to interact with the API, akip to the endpoints section
+- CLone this repo
+- Start the virtual env using `source env/bin/activate`
+- install requirements with `pip3 install -r requirements.txt`
+- start the API with `python3 app.py`
+
 ----
 ## End Points 
 You can access this API through the deployed site above. 
